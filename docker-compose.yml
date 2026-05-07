@@ -1,0 +1,27 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    user: root
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=Asia/Shanghai
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
+      - N8N_RUNNERS_ENABLED=true
+      # 允许 Code 节点使用所有 Node.js 内置模块
+      - NODE_FUNCTION_ALLOW_BUILTIN=*
+      # 允许 Code 节点使用外部 npm 包（如需要可改为具体包名）
+      - NODE_FUNCTION_ALLOW_EXTERNAL=*
+    volumes:
+      - n8n_data:/home/node/.n8n
+      # 映射本地目录以便保存漏洞收集资料
+      - ./data:/data
+
+volumes:
+  n8n_data:
